@@ -1,0 +1,27 @@
+{
+  "name": "getaaaaarr",
+  "version": "0.0.0",
+  "description": "Get A and AAAA resource records for a domain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stuartpb/getaaaaarr"
+  },
+  "keywords": [
+    "dns",
+    "a",
+    "aaaa"
+  ],
+  "author": "Stuart P. Bentley <stuart@testtrack4.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stuartpb/getaaaaarr/issues"
+  },
+  "homepage": "https://github.com/stuartpb/getaaaaarr",
+  "dependencies": {
+    "native-dns": "~0.4.1"
+  }
+}
