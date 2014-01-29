@@ -1,16 +1,24 @@
-var dns = require('native-dns');
+var dns = require('dns');
+var queue = require('queue-async');
+
+function makeRecord(type) {
+  return function (address) {
+    return {
+      type: type,
+      address: address
+    };
+  };
+}
 
 module.exports = function(domain, cb) {
-  dns.resolve(domain, function(err, records) {
-    if (err) return cb(err);
-    var arecs = [];
-    for (var i = 0; i < records.length; i++) {
-      if ( records[i].type == dns.consts.NAME_TO_QTYPE.A
-        || records[i].type == dns.consts.NAME_TO_QTYPE.AAAA) {
-          records[i].type = dns.consts.QTYPE_TO_NAME[records[i].type];
-          arecs[arecs.length] = records[i];
-        }
-    }
-    return cb(null,arecs);
-  })
+  queue()
+    .defer(dns.resolve, domain, 'A')
+    .defer(dns.resolve, domain, 'AAAA')
+    .await(function(err, recs4, recs6) {
+      if (err) return cb(err);
+      return cb(null,[].concat(
+        recs4.map(makeRecord('A')),
+        recs6.map(makeRecord('AAAA'))
+      ));
+    });
 }
